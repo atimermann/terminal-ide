@@ -1,0 +1,5 @@
+- Implementado versão inicial da IDE por linha de comando baseado na logica do nchat com nodejs e BLESSED
+- Suporte a cursor, rolagem de telas
+- Até agora só abre arquivo fixo com ctrl+o
+- Organizar o código do Editor, tá complexo em um arquivo grande, separada cada funcionalidade em um novo arquivo pra melhor organização
+

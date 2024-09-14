@@ -1,0 +1,28 @@
+- Salvamento automático
+- UndoRedo
+- Historico Local
+- Copiar/colar
+- Atalhos de código
+- Lint automático ou manual com aviso de problema inline
+- Gerenciamento do projeto em vez de arquivo, onde vc pode escolher o arquivo a ser editado
+- Lista de arquivos abertos
+- Ao pressionar enter identar automaticamente
+- Salvar/editar
+- Numero de linha
+- Integração chatGPT
+- Autocompletar inteligente
+    - Sugestões de código baseadas em análise estática e em machine learning, semelhante ao IntelliSense e completadores como o coc.nvim.
+    - Completador baseado em linguagem, sugerindo variáveis, métodos, classes, bibliotecas.
+- Integração com Git coisas básicas
+- Documentação em tempo real e integração com JSDoc/PHPDoc
+- Pesquisa e substituição avançada
+- Navegação rápida no código
+    - Suporte a atalhos para navegar rapidamente entre funções, classes e métodos.
+    - "Go to Definition" e "Find Usages" para navegar entre arquivos e dependências.
+- Suporte a múltiplos cursores
+    - Edição em múltiplas áreas simultaneamente, como colocar cursores em várias linhas ao mesmo tempo e fazer edições em lote.
+- Integração Docker/Kubernetes
+- Controle de erros em tempo real
+    - Ferramentas de controle de erros em tempo real que destacam problemas no código à medida que o usuário digita, oferecendo sugestões e correções.
+- AI Pair Programming
+
