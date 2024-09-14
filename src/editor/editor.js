@@ -11,15 +11,18 @@ export class Editor {
             parent: this.screen,
             tags: true,
             top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%-1',
+            left: '20%',
+            width: '80%',
+            height: '80%-1',
             mouse: true,
             scrollable: true,
             alwaysScroll: true,
             scrollbar: {
                 ch: ' ',
                 inverse: true,
+            },
+            border: {
+                type: 'line'
             }
         });
 
@@ -27,6 +30,14 @@ export class Editor {
         this.keymap = new Keymap(this);
 
         this.updateContent();
+    }
+
+    setPosition(top, left, width, height) {
+        this.editor.top = top;
+        this.editor.left = left;
+        this.editor.width = width;
+        this.editor.height = height;
+        this.screen.render();
     }
 
     getLines() {
@@ -39,6 +50,10 @@ export class Editor {
         this.cursor.row = 0;
         this.cursor.col = 0;  // Reinicia a posição do cursor
         this.updateContent();  // Atualiza o conteúdo exibido
+    }
+
+    getContent(){
+        return this.content
     }
 
     updateContent() {

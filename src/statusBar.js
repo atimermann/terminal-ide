@@ -9,9 +9,10 @@ export function createStatusBar(screen) {
         height: 1,
         style: {
             fg: 'black',
-            bg: 'green',
+            bg: 'gray',
+            bold: true
         },
-        content: 'Ctrl+S: Salvar | Ctrl+O: Abrir | Ctrl+C: Sair',
+        content: 'Ctrl+S: Salvar | Ctrl+O: Abrir | Ctrl+C: Sair | Ctrl+Setas: Navega lista de arquivos',
     });
 
     return statusBar;

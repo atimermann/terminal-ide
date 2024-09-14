@@ -63,16 +63,27 @@ export class Cursor {
     }
 
     injectCursorMark(lines) {
-        lines[this.row] = lines[this.row].slice(0, this.col) + '✦' + lines[this.row].slice(this.col, this.col + 1) + '✶' + lines[this.row].slice(this.col + 1);
-        return lines
+        // Inserindo os delimitadores invisíveis
+        lines[this.row] = lines[this.row].slice(0, this.col) + '\u200B' + lines[this.row].slice(this.col, this.col + 1) + '\u2063' + lines[this.row].slice(this.col + 1);
+        return lines;
     }
 
     renderCursor(highlightedCode) {
-        return highlightedCode.replace(/✦([\s\S]*?)✶/, (match, capturedText) => {
+        // Regex para capturar o código ANSI antes e depois do cursor
+        return highlightedCode.replace(/\u200B([\s\S]*?)\u2063/, (match, capturedText, offset, string) => {
+            // Captura a formatação ANSI antes do delimitador \u200B
+            const beforeCursor = string.slice(0, offset);
+            const ansiBeforeCursor = beforeCursor.match(/(\x1b\[[0-9;]*m)+$/);
+            const previousFormat = ansiBeforeCursor ? ansiBeforeCursor[0] : '';
+
+            // Caso o conteúdo seja vazio ou espaço, substitua por um espaço visível
             if (!capturedText.trim()) {
-                capturedText = ' ';  // Um espaço visível que pode ter o fundo azul
+                capturedText = ' ';  // Um espaço visível para garantir o fundo azul
             }
-            return `\x1b[7m${capturedText}\x1b[0m`; // Modo inverso e reset de formatação
+
+            // Retorna o texto com a inversão de cor e restabelece a formatação anterior
+            return `${previousFormat}\x1b[7m${capturedText}\x1b[0m${previousFormat}`;
         });
     }
+
 }
