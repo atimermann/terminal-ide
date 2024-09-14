@@ -6,8 +6,8 @@ export class WindowManager {
 
         // Configurações iniciais de layout
         this.layout = {
-            fileTree: { top: 0, left: 0, width: '10%', height: '80%' },
-            editor: { top: 0, left: '10%', width: '90%', height: '80%' },
+            fileTree: { top: 0, left: 0, width: '15%', height: '80%' },
+            editor: { top: 0, left: '15%', width: '85%', height: '80%' },
             consoleBox: { top: '80%', left: 0, width: '100%', height: '20%' },
         };
 

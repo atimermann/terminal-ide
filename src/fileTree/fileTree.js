@@ -9,7 +9,7 @@ export class FileTree {
         this.nodes = [];
         this.tree = [];
         this.selectedNodeIndex = 0;
-        this.fileManager = fileManager
+        this.fileManager = fileManager;
 
         // Cria o widget de file tree
         this.fileTree = blessed.box({
@@ -40,35 +40,46 @@ export class FileTree {
         this.screen.render();
     }
 
-    // Método para construir a estrutura da árvore a partir de um diretório, começando sem o diretório raiz
+    // Método para construir a estrutura da árvore a partir de um diretório, ignorando links e arquivos/diretórios inacessíveis
     buildTree(dir) {
-        const files = fs.readdirSync(dir);
-        const tree = [];
+        let tree = [];
+        try {
+            const files = fs.readdirSync(dir);
+            files.forEach(file => {
+                if (file.startsWith('.')) return;  // Ignora arquivos/diretórios ocultos
+                const fullPath = path.join(dir, file);
 
-        files.forEach(file => {
-            if (file.startsWith('.')) return;  // Ignora arquivos/diretórios ocultos
-            const fullPath = path.join(dir, file);
-            const isDirectory = fs.statSync(fullPath).isDirectory();
-            if (isDirectory) {
-                tree.push({
-                    name: file,
-                    path: fullPath,
-                    type: 'directory',
-                    children: this.buildTree(fullPath),  // Recursivamente adiciona subdiretórios
-                    extended: false
-                });
-            } else {
-                tree.push({ name: file, path: fullPath, type: 'file' });  // Adiciona arquivos
-            }
-        });
+                try {
+                    const stats = fs.lstatSync(fullPath); // Usa lstatSync para verificar links simbólicos
+                    if (stats.isSymbolicLink()) return; // Ignora links simbólicos
 
-        // Ordena a lista colocando diretórios antes dos arquivos, e ambos em ordem alfabética
-        tree.sort((a, b) => {
-            if (a.type === b.type) {
-                return a.name.localeCompare(b.name);
-            }
-            return a.type === 'directory' ? -1 : 1;
-        });
+                    if (stats.isDirectory()) {
+                        tree.push({
+                            name: file,
+                            path: fullPath,
+                            type: 'directory',
+                            children: this.buildTree(fullPath),  // Recursivamente adiciona subdiretórios
+                            extended: false
+                        });
+                    } else if (stats.isFile()) {
+                        tree.push({ name: file, path: fullPath, type: 'file' });  // Adiciona arquivos
+                    }
+                } catch (err) {
+                    console.error(`Erro ao acessar: ${fullPath}. Ignorando.`);
+                }
+            });
+
+            // Ordena a lista colocando diretórios antes dos arquivos, e ambos em ordem alfabética
+            tree.sort((a, b) => {
+                if (a.type === b.type) {
+                    return a.name.localeCompare(b.name);
+                }
+                return a.type === 'directory' ? -1 : 1;
+            });
+
+        } catch (err) {
+            console.error(`Erro ao ler o diretório: ${dir}. Ignorando.`);
+        }
 
         return tree;
     }
@@ -113,8 +124,8 @@ export class FileTree {
                 this.expandNode();  // Expande nó (abre diretório)
             }
             if (key.full === 'C-left') {
-                    this.collapseNode();  // Colapsa nó (fecha diretório)
-                }
+                this.collapseNode();  // Colapsa nó (fecha diretório)
+            }
             if (key.full === 'C-o') {
                 this.openSelectedFile(); // Usa Ctrl + O para abrir o arquivo selecionado
             }
