@@ -10,10 +10,10 @@ export class Editor {
         this.editor = blessed.box({
             parent: this.screen,
             tags: true,
-            width: '100%',
-            height: '100%-1',
             top: 0,
             left: 0,
+            width: '100%',
+            height: '100%-1',
             mouse: true,
             scrollable: true,
             alwaysScroll: true,

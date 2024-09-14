@@ -56,8 +56,7 @@ export class Cursor {
     ensureVisibility() {
         const visibleLines = this.editor.editor.height - 1; // Subtraímos as margens do editor
         if (this.row > this.editor.editor.childBase + visibleLines) {
-            // TODO: Fix rolagem para baixo, não está movendo para posição correta
-            this.editor.editor.scrollTo(this.row); // Rola para o cursor
+            this.editor.editor.scrollTo(this.row - visibleLines); // Rola para o cursor
         } else if (this.row < this.editor.editor.childBase) {
             this.editor.editor.scrollTo(this.row); // Rola para cima se o cursor estiver fora de vista
         }
