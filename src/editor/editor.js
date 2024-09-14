@@ -28,6 +28,7 @@ export class Editor {
 
         this.updateContent();
     }
+
     getLines() {
         return this.content.split('\n');
     }
@@ -86,6 +87,23 @@ export class Editor {
         lines.splice(this.cursor.row + 1, 0, newLine);
         this.cursor.row++;
         this.cursor.col = 0;
+        this.content = lines.join('\n');
+        this.updateContent();
+    }
+
+    handleDelete() {
+        const lines = this.getLines();
+
+        // Caso ainda haja caracteres na linha à direita do cursor, remove o caractere à frente
+        if (this.cursor.col < lines[this.cursor.row].length) {
+            lines[this.cursor.row] = lines[this.cursor.row].slice(0, this.cursor.col) + lines[this.cursor.row].slice(this.cursor.col + 1);
+        } else if (this.cursor.row < lines.length - 1) {
+            // Se estiver no fim da linha, mas não na última linha, junta a linha atual com a próxima
+            const nextLine = lines[this.cursor.row + 1];
+            lines[this.cursor.row] += nextLine;
+            lines.splice(this.cursor.row + 1, 1);
+        }
+
         this.content = lines.join('\n');
         this.updateContent();
     }

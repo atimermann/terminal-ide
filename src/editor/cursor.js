@@ -10,6 +10,7 @@ export class Cursor {
     // Método para mover o cursor
     move(direction) {
         const lines = this.editor.getLines()
+        const visibleLines = this.editor.editor.height - 1;
         switch (direction) {
             case 'left':
                 if (this.col > 0) {
@@ -33,11 +34,19 @@ export class Cursor {
                     this.col = Math.min(this.col, lines[this.row].length);  // Ajusta coluna para não ultrapassar a linha
                 }
                 break;
+            case 'pageup':
+                this.row = Math.max(this.row - visibleLines, 0);
+                this.col = Math.min(this.col, lines[this.row].length);  // Ajusta a coluna para não ultrapassar a linha
+                break;
+            case 'pagedown':
+                this.row = Math.min(this.row + visibleLines, lines.length - 1);
+                this.col = Math.min(this.col, lines[this.row].length);  // Ajusta a coluna para não ultrapassar a linha
+                break;
             case 'home':
-                this.col = 0;  // Move o cursor para o início da linha
+                this.col = 0;
                 break;
             case 'end':
-                this.col = lines[this.row].length;  // Move o cursor para o fim da linha
+                this.col = lines[this.row].length;
                 break;
         }
         this.editor.updateContent();
@@ -47,7 +56,8 @@ export class Cursor {
     ensureVisibility() {
         const visibleLines = this.editor.editor.height - 1; // Subtraímos as margens do editor
         if (this.row > this.editor.editor.childBase + visibleLines) {
-            this.editor.editor.scrollTo(this.editor.editor.childBase + 1); // Rola para o cursor
+            // TODO: Fix rolagem para baixo, não está movendo para posição correta
+            this.editor.editor.scrollTo(this.row); // Rola para o cursor
         } else if (this.row < this.editor.editor.childBase) {
             this.editor.editor.scrollTo(this.row); // Rola para cima se o cursor estiver fora de vista
         }
